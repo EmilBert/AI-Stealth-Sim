@@ -7,11 +7,19 @@ using UnityEngine.AI;
 
 public class Agent : MonoBehaviour
 {   
-       public Transform goal;
+    public Transform goal;
+    public Animator animator;
+    private NavMeshAgent agent;
     
-       void Start () {
-          NavMeshAgent agent = GetComponent<NavMeshAgent>();
-          agent.destination = goal.position; 
-       }
-    
+    void Start () {
+        animator = GetComponent<Animator>();
+        agent = GetComponent<NavMeshAgent>();
+        agent.destination = goal.position; 
+    }
+
+    private void Update()
+    {
+        animator.SetBool("moving", Vector3.Distance(goal.position, transform.position) > 0.1f);
+    }
+
 }
