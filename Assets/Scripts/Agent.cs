@@ -14,12 +14,21 @@ public class Agent : MonoBehaviour
     void Start () {
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
-        agent.destination = goal.position; 
+        StartCoroutine(updateAnimState());
     }
 
-    private void Update()
-    {
-        animator.SetBool("moving", Vector3.Distance(goal.position, transform.position) > 0.1f);
+    public void GiveGoal(Transform trans){
+        goal = trans;
+        agent.destination = trans.position;
+    }
+
+    IEnumerator updateAnimState(){
+        while(true){
+            animator.SetBool("moving", 
+                goal != null ? (new Vector2(goal.position.x - transform.position.x, goal.position.z - transform.position.z).sqrMagnitude) > 0.5f : false);
+            Debug.Log(goal == null);
+            yield return new WaitForSeconds(.1f);
+        }
     }
 
 }
