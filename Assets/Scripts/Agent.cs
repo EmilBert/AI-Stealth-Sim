@@ -23,10 +23,12 @@ public class Agent : MonoBehaviour
     }
 
     IEnumerator updateAnimState(){
-        animator.SetBool("moving", 
-            goal != false ? (new Vector2(goal.position.x - transform.position.x, goal.position.z - transform.position.z).sqrMagnitude) > 0.5f : false);
-            Debug.Log((new Vector2(goal.position.x - transform.position.x, goal.position.z - transform.position.z).sqrMagnitude));
-        yield return new WaitForSeconds(.1f);
+        while(true){
+            animator.SetBool("moving", 
+                goal != null ? (new Vector2(goal.position.x - transform.position.x, goal.position.z - transform.position.z).sqrMagnitude) > 0.5f : false);
+            Debug.Log(goal == null);
+            yield return new WaitForSeconds(.1f);
+        }
     }
 
 }
