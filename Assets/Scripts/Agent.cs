@@ -15,11 +15,13 @@ public class Agent : MonoBehaviour
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         agent.destination = goal.position; 
+        StartCoroutine(updateAnimState());
     }
 
-    private void Update()
-    {
-        animator.SetBool("moving", Vector3.Distance(goal.position, transform.position) > 0.1f);
+    IEnumerator updateAnimState(){
+        animator.SetBool("moving", 
+            goal ? (new Vector2(goal.position.x - transform.position.x, goal.position.z - transform.position.z).sqrMagnitude) > 0.5f : false);
+        yield return new WaitForSeconds(.1f);
     }
 
 }
