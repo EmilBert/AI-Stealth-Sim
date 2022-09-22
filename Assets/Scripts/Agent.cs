@@ -10,7 +10,7 @@ public class Agent : MonoBehaviour
     public Vector3 goal;
     private Animator animator;
     private NavMeshAgent agent;
-    private readonly float[] speeds = {0.0f, 3.5f};
+    private readonly float[] speeds = {0.0f, 3.5f}; //TODO: Remove
     
     void Start () {
         animator = GetComponent<Animator>();
@@ -19,8 +19,8 @@ public class Agent : MonoBehaviour
     }
 
     public void GiveGoal(Vector3 newGoal, int urgency){
+        //TODO: Remove all references to this
         goal = newGoal;
-        Debug.Log(agent == null);
         agent.destination = newGoal;
         if(urgency >= 0 && urgency < speeds.Length) agent.speed = speeds[urgency];
         else agent.speed = speeds[0];
@@ -29,10 +29,7 @@ public class Agent : MonoBehaviour
     IEnumerator updateAnimState(){
         while(true){
             //Default: No target available, should not move.
-            bool shouldMove = false;
-            if(goal != null) {
-                shouldMove = new Vector2(goal.x - transform.position.x, goal.z - transform.position.z).sqrMagnitude > 0.5f;
-            }
+            bool shouldMove = agent.speed > 0.1f;
             //TODO: If we have several agent speeds, probably change this to int or float
             animator.SetBool("moving", shouldMove);
             yield return new WaitForSeconds(.1f);

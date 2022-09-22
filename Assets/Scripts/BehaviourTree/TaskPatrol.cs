@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 using BehaviourTree;
 
@@ -14,38 +15,42 @@ public class TaskPatrol : Node
 
     private Transform _transform;
     private Transform[] _waypoints;
-    private Agent _agent;
+    private NavMeshAgent _agent;
 
-    public TaskPatrol(Transform transform, Transform[] waypoints, Agent agent)
+    public TaskPatrol(Transform transform, Transform[] waypoints, NavMeshAgent agent)
     {
         _transform = transform;
         _waypoints = waypoints;
         _agent = agent;
-        _agent.GiveGoal(waypoints[0].position, 1);
-        _currentWaypointIndex = (_currentWaypointIndex + 1) % _waypoints.Length;
+        _agent.SetDestination(waypoints[0].position);
     }
 
-    public override NodeState Evaluate()
+        public override NodeState Evaluate()
     {
-        if (_waiting)
+        Transform wp = _waypoints[_currentWaypointIndex];
+        if (new Vector2(_transform.position.x - wp.position.x, _transform.position.z - wp.position.z).sqrMagnitude < 0.01f)
         {
-            _waitCounter += Time.deltaTime;
-            if (_waitCounter >= _waitTime)
-            {
-                _waiting = false;
+            if(_waiting) {
+                _agent.speed = 0.0f;
+                //At waypoint, waiting.
+                //Wait for the wait timer to finish.
+                _waitCounter += Time.deltaTime;
+                if (_waitCounter >= _waitTime)
+                {
+                    _waiting = false;
+                }
             }
-        }
-        else
-        {
-            Transform wp = _waypoints[_currentWaypointIndex];
-            if (Vector3.Distance(_transform.position, wp.position) < 0.01f)
-            {
-                //_transform.position = wp.position;
-                Debug.Log(wp.position);
-                _agent.GiveGoal(wp.position, 1);
+            else {
+                //At waypoint, not waiting.
+                //Set new waypoint and walk towards it.
+                _transform.position = wp.position;
                 _waitCounter = 0f;
                 _waiting = true;
+                _agent.speed = GuardBT.speed;
+
                 _currentWaypointIndex = (_currentWaypointIndex + 1) % _waypoints.Length;
+                _agent.SetDestination(_waypoints[_currentWaypointIndex].position);
+                Debug.Log("New Destination: " + _waypoints[_currentWaypointIndex].position);
             }
         }
     
