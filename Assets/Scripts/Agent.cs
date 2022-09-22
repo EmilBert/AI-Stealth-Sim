@@ -20,6 +20,7 @@ public class Agent : MonoBehaviour
 
     public void GiveGoal(Vector3 newGoal, int urgency){
         goal = newGoal;
+        Debug.Log(agent == null);
         agent.destination = newGoal;
         if(urgency >= 0 && urgency < speeds.Length) agent.speed = speeds[urgency];
         else agent.speed = speeds[0];

@@ -18,7 +18,7 @@ namespace BehaviourTree
         protected NodeState state;
         protected List<Node> children;
 
-        //shared data
+        // Shared data
         private Dictionary<string, object> _dataContext = new Dictionary<string, object>();
 
         public Node()

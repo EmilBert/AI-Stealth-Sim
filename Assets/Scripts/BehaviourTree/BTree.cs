@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Tree : MonoBehaviour
+public abstract class BTree : MonoBehaviour
 {
 
     private Node _root = null;

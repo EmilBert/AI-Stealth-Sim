@@ -12,6 +12,7 @@ public class FieldOfView : MonoBehaviour
     public LayerMask targetMask;
     public LayerMask obstacleMask;
     private Agent agent;
+    private Transform currentTarget;
 
     public List<Transform> visibleTargets = new List<Transform>();
     public List<Transform> suspicousTargets = new List<Transform>();
@@ -28,6 +29,21 @@ public class FieldOfView : MonoBehaviour
             FindSuspiciousTargets();
         }
     }
+    IEnumerator Investigate(float time, Transform target){
+        yield return new WaitForSeconds(time);
+        agent.GiveGoal(target.position, 1);
+    }
+
+    void TargetFound(Transform target){
+        agent.GiveGoal(target.position, 1);
+        //Debug.Log(currentTarget + " !");
+    }
+
+    void SusFound(Transform target){
+        StartCoroutine(Investigate(5, target));
+        //Debug.Log(currentTarget +" ?");
+    }
+
 
     void FindVisibleTargets(){
         visibleTargets.Clear();
@@ -41,8 +57,9 @@ public class FieldOfView : MonoBehaviour
 
                 if(!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)){
                     visibleTargets.Add(target);
-                    //Debug.Log("!");
-                    agent.GiveGoal(target);
+                    currentTarget = target;
+                    TargetFound(target);
+
                 }
             }
         }
@@ -53,14 +70,17 @@ public class FieldOfView : MonoBehaviour
 
         for(int i = 0; i < targetsInViewRadius.Length; i++){
             Transform target = targetsInViewRadius[i].transform;
+            if(visibleTargets.Contains(target)){
+                continue;
+            }
             Vector3 dirToTarget = (target.position - transform.position).normalized;
             if(Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2){
                 float dstToTarget = Vector3.Distance(transform.position, target.position);
 
                 if(!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)){
                     suspicousTargets.Add(target);
-                    //Debug.Log("?");
-                    agent.GiveGoal(target);
+                    currentTarget = target;
+                    SusFound(target);
                 }
             }
         }
