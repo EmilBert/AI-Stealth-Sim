@@ -13,19 +13,19 @@ public class TaskPatrol : Node
     private float _waitCounter = 0f;
     private bool _waiting = false;
 
-    private Transform _transform;
-    private Transform[] _waypoints;
-    private NavMeshAgent _agent;
+    private Transform       _transform;
+    private Transform[]     _waypoints;
+    private NavMeshAgent    _agent;
 
-    public TaskPatrol(Transform transform, Transform[] waypoints, NavMeshAgent agent)
+    public TaskPatrol(Transform[] waypoints, Transform transform, NavMeshAgent agent)
     {
-        _transform = transform;
         _waypoints = waypoints;
+        _transform = transform;
         _agent = agent;
-        _agent.SetDestination(waypoints[0].position);
+        _agent.SetDestination(_waypoints[_currentWaypointIndex].position);
     }
 
-        public override NodeState Evaluate()
+    public override NodeState Evaluate()
     {
         Transform wp = _waypoints[_currentWaypointIndex];
         if (new Vector2(_transform.position.x - wp.position.x, _transform.position.z - wp.position.z).sqrMagnitude < 0.01f)
@@ -43,7 +43,7 @@ public class TaskPatrol : Node
             else {
                 //At waypoint, not waiting.
                 //Set new waypoint and walk towards it.
-                _transform.position = wp.position;
+                //_transform.position = wp.position;
                 _waitCounter = 0f;
                 _waiting = true;
                 _agent.speed = GuardBT.speed;

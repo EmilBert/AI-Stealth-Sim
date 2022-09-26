@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class FieldOfView : MonoBehaviour
 {
+    public enum GuardStates
+    {
+        DEFAULT,
+        SUSPICIOUS,
+        ALERTED
+    }
     public float viewRadius;
     [Range(0,100)]
     public float susPercentage;
@@ -11,11 +17,13 @@ public class FieldOfView : MonoBehaviour
     public float viewAngle;
     public LayerMask targetMask;
     public LayerMask obstacleMask;
-    private Agent agent;
-    private Transform currentTarget;
-
+ 
     public List<Transform> visibleTargets = new List<Transform>();
     public List<Transform> suspicousTargets = new List<Transform>();
+    
+    private Agent agent;
+    private Transform currentTarget;
+    private GuardStates state = GuardStates.DEFAULT;  
 
     void Start(){
         agent = GetComponent<Agent>();
@@ -29,21 +37,15 @@ public class FieldOfView : MonoBehaviour
             FindSuspiciousTargets();
         }
     }
-    IEnumerator Investigate(float time, Transform target){
-        yield return new WaitForSeconds(time);
-        agent.GiveGoal(target.position, 1);
+
+    public Transform GetCurrentTarget(){
+        if(currentTarget) return currentTarget;
+        return null;
     }
 
-    void TargetFound(Transform target){
-        agent.GiveGoal(target.position, 1);
-        //Debug.Log(currentTarget + " !");
+    public GuardStates GetState(){
+        return state;
     }
-
-    void SusFound(Transform target){
-        StartCoroutine(Investigate(5, target));
-        //Debug.Log(currentTarget +" ?");
-    }
-
 
     void FindVisibleTargets(){
         visibleTargets.Clear();
@@ -58,8 +60,7 @@ public class FieldOfView : MonoBehaviour
                 if(!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)){
                     visibleTargets.Add(target);
                     currentTarget = target;
-                    TargetFound(target);
-
+                    state = GuardStates.ALERTED;
                 }
             }
         }
@@ -80,7 +81,7 @@ public class FieldOfView : MonoBehaviour
                 if(!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)){
                     suspicousTargets.Add(target);
                     currentTarget = target;
-                    SusFound(target);
+                    state = GuardStates.SUSPICIOUS;
                 }
             }
         }

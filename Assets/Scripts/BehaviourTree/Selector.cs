@@ -5,6 +5,7 @@ namespace BehaviourTree
 {
     public class Selector : Node
     {
+        // A node that acts like an "or" logic gate;
         public Selector() : base() { }
         public Selector(List<Node> children) : base(children) { }
 
@@ -26,7 +27,6 @@ namespace BehaviourTree
                         continue;
                 }
             }
-
             state = NodeState.FAILURE;
             return state;
         }
