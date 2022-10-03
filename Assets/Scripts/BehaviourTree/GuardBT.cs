@@ -7,10 +7,10 @@ public class GuardBT : BTree
 {
     public Transform[] waypoints;
     public static float speed = 3.5f;
-    
-    private Transform transform;
-    private NavMeshAgent agent;
-    private FieldOfView fov;
+
+    protected Transform transform;
+    protected NavMeshAgent agent;
+    protected FieldOfView fov;
 
     protected override Node SetupTree()
     {
@@ -22,17 +22,25 @@ public class GuardBT : BTree
 
         Node root = new Selector(new List<Node>
         {
-            new Sequence(new List<Node>
-            {
-                // Chase
-                new CheckAlert(fov),
-                new TaskInvestigate(agent, fov),
-            }),
+            // new Sequence(new List<Node>
+            // {
+            //     // Chase
+            //     new CheckAlert(fov),
+            //     new Selector(new List<Node>
+            //     {
+            //         new Wait(5, agent),
+            //         new TaskInvestigate(agent, fov),
+            //     })
+            // }),
             new Sequence(new List<Node>
             {
                 // Investigate
-                new CheckSuspicious(fov),
-                new TaskInvestigate(agent, fov),
+                new CheckSuspicious(fov, transform),
+                new Selector(new List<Node>
+                {
+                    new Wait(5, agent),
+                    new TaskInvestigate(agent, fov),
+                })
             }),
             // Patrol
             new TaskPatrol(waypoints, transform, agent),

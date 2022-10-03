@@ -15,7 +15,7 @@ public class TaskInvestigate : Node
     private Transform       _target;
     private NavMeshAgent    _agent;
     private FieldOfView     _fov;
-
+    private Vector3         _pos;
 
     public TaskInvestigate(NavMeshAgent agent, FieldOfView fov)
     {
@@ -26,13 +26,21 @@ public class TaskInvestigate : Node
     public override NodeState Evaluate()
     {
         _target = _fov.GetCurrentTarget();
+        _pos = _fov.GetLastSeenPosition();
 
         if(_target != null){
-            _agent.SetDestination(_target.position);
-            return NodeState.SUCCESS;
+            _agent.SetDestination(_pos);
+            
+            if(_agent.remainingDistance <= 0.2f){
+                Debug.Log("At Target");
+                
+
+                return NodeState.FAILURE;
+            }
+            Debug.Log("Moving towards target");
+            return NodeState.RUNNING;
         }    
-        
-        return NodeState.FAILURE;
+        return NodeState.SUCCESS;
     }
 
 }

@@ -18,7 +18,8 @@ public class FieldOfView : MonoBehaviour
     
     private Agent agent;
     [SerializeField]private Transform currentTarget;
-    private GuardStates state;  
+    private Vector3 lastSeenPosition;
+    [SerializeField]private GuardStates state;  
 
     void Start(){
         agent = GetComponent<Agent>();
@@ -27,6 +28,11 @@ public class FieldOfView : MonoBehaviour
     public Transform GetCurrentTarget(){
         if(currentTarget) return currentTarget;
         return null;
+    }
+
+    public Vector3 GetLastSeenPosition(){
+        if(lastSeenPosition != null) return lastSeenPosition;
+        return Vector3.zero;
     }
 
     public GuardStates GetState(){
@@ -46,11 +52,13 @@ public class FieldOfView : MonoBehaviour
                 if(!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)){
                     visibleTargets.Add(target);
                     currentTarget = target;
+                    lastSeenPosition = target.position;
                     state = GuardStates.ALERTED;
                     return GuardStates.ALERTED;
                 }
             }
         }
+        state = GuardStates.DEFAULT;
         return GuardStates.DEFAULT;
     }
     public GuardStates FindSuspiciousTargets(){
@@ -69,10 +77,13 @@ public class FieldOfView : MonoBehaviour
                 if(!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)){
                     suspicousTargets.Add(target);
                     currentTarget = target;
+                    lastSeenPosition = target.position;
+                    state = GuardStates.SUSPICIOUS;
                     return GuardStates.SUSPICIOUS;
                 }
             }
         }
+        state = GuardStates.DEFAULT;
         return GuardStates.DEFAULT;
     }
 

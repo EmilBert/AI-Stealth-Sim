@@ -9,18 +9,25 @@ public class CheckSuspicious : Node
     private FieldOfView _fov;
     private GuardStates _state;
     private NodeState _nodeState;
+    private Transform _transform;
 
-    public CheckSuspicious(FieldOfView fov)
+    public CheckSuspicious(FieldOfView fov, Transform transform)
     {
         _fov = fov;
+        _transform = transform;
     }
 
     public override NodeState Evaluate()
     {
-        _state = _fov.FindVisibleTargets();
+        _state = _fov.FindSuspiciousTargets();
+        Debug.Log(_state);
 
         if( _state == GuardStates.SUSPICIOUS)
         {
+        var lookDir = _fov.GetLastSeenPosition() - _transform.position;
+        lookDir = new Vector3(lookDir.x, 0, lookDir.z);
+        _transform.rotation = Quaternion.LookRotation(lookDir);
+
             _nodeState = NodeState.SUCCESS;
         }
         else

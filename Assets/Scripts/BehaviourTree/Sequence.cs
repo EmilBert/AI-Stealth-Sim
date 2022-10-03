@@ -32,8 +32,7 @@ namespace BehaviourTree
                         return state;
                 }
             }
-
-            state = anyChildIsRunning ? NodeState.RUNNING : NodeState.RUNNING;
+            state = anyChildIsRunning ? NodeState.RUNNING : NodeState.SUCCESS;
             return state;
         }
     }
