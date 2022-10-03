@@ -16,7 +16,7 @@ namespace BehaviourTree
         public Node parent;
 
         protected NodeState state;
-        protected List<Node> children;
+        protected List<Node> children = new List<Node>();
 
         // Shared data
         private Dictionary<string, object> _dataContext = new Dictionary<string, object>();
@@ -36,6 +36,7 @@ namespace BehaviourTree
 
         private void _Attach(Node child)
         {
+            UnityEngine.Debug.Log(this);
             child.parent = this;
             children.Add(child);
         }
