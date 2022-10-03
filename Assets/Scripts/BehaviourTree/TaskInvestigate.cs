@@ -27,16 +27,14 @@ public class TaskInvestigate : Node
     {
         _target = _fov.GetCurrentTarget();
         _pos = _fov.GetLastSeenPosition();
-
-        
-            _agent.SetDestination(_pos);
+        _agent.SetDestination(_pos);
             
-            if(_agent.remainingDistance <= 0.2f){
-                Debug.Log("At Target");
-                return NodeState.FAILURE;
-            }
-            Debug.Log("Moving towards target");
-            return NodeState.RUNNING;
+        if(_agent.remainingDistance <= 0.2f){
+            Debug.Log("At Target");
+            return NodeState.FAILURE;
+        }
+        Debug.Log("Moving towards target");
+        return NodeState.RUNNING;
         
     }
 

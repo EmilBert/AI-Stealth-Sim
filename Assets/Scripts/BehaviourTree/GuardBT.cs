@@ -22,16 +22,12 @@ public class GuardBT : BTree
 
         Node root = new Selector(new List<Node>
         {
-            // new Sequence(new List<Node>
-            // {
-            //     // Chase
-            //     new CheckAlert(fov),
-            //     new Selector(new List<Node>
-            //     {
-            //         new Wait(5, agent),
-            //         new TaskInvestigate(agent, fov),
-            //     })
-            // }),
+            new Sequence(new List<Node>
+            {
+                // Chase
+                new CheckAlert(fov),
+                new TaskChase(fov, agent, transform),
+            }),
             new Sequence(new List<Node>
             {
                 // Investigate
