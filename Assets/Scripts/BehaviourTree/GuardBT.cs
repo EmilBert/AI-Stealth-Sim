@@ -35,7 +35,7 @@ public class GuardBT : BTree
             new Sequence(new List<Node>
             {
                 // Investigate
-                new CheckSuspicious(fov, transform),
+                new CheckSuspicious(fov, transform, agent),
                 new Selector(new List<Node>
                 {
                     new Wait(5, agent),
