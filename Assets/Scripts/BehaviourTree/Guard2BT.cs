@@ -31,7 +31,7 @@ public class Guard2BT : GuardBT
                 new CheckSuspicious(fov),
                 new TaskInvestigate(agent, fov),
             }),
-            // Stationary rotation
+            // Stationary rotation 
             new LookAround(agent, transform, rotationSpeed),
         });
 
