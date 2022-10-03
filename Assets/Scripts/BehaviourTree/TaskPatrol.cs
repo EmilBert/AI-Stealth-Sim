@@ -50,7 +50,7 @@ public class TaskPatrol : Node
 
                 _currentWaypointIndex = (_currentWaypointIndex + 1) % _waypoints.Length;
                 _agent.SetDestination(_waypoints[_currentWaypointIndex].position);
-                Debug.Log("New Destination: " + _waypoints[_currentWaypointIndex].position);
+                //Debug.Log("New Destination: " + _waypoints[_currentWaypointIndex].position);
             }
         }
     

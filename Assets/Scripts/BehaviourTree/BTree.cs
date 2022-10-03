@@ -3,6 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum GuardStates
+    {
+        DEFAULT,
+        SUSPICIOUS,
+        ALERTED
+    }
+
 public abstract class BTree : MonoBehaviour
 {
 

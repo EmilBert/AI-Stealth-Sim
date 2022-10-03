@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 using BehaviourTree;
 
-public class Investigate : Node
+public class TaskInvestigate : Node
 {
     private int     _currentWaypointIndex = 0;
     private float   _waitTime = 1f; // in seconds
@@ -17,16 +17,22 @@ public class Investigate : Node
     private FieldOfView     _fov;
 
 
-    public Investigate(Transform target, NavMeshAgent agent, FieldOfView fov)
+    public TaskInvestigate(NavMeshAgent agent, FieldOfView fov)
     {
-        _target = target; 
-        _agent.SetDestination(_target.position);
         _fov = fov;
+        _agent = agent;
     }
 
     public override NodeState Evaluate()
     {
-        return state = NodeState.SUCCESS;
+        _target = _fov.GetCurrentTarget();
+
+        if(_target != null){
+            _agent.SetDestination(_target.position);
+            return NodeState.SUCCESS;
+        }    
+        
+        return NodeState.FAILURE;
     }
 
 }

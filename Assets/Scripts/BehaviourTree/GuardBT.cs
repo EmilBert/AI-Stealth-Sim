@@ -18,25 +18,25 @@ public class GuardBT : BTree
         fov = GetComponent<FieldOfView>();
         transform = GetComponent<Transform>();
 
-        Node root = new TaskPatrol(waypoints, transform, agent);
+        //Node root = new TaskPatrol(waypoints, transform, agent);
 
-        // Node root = new Selector(new List<Node>
-        // {
-        //     new Sequence(new List<Node>
-        //     {
-        //         // Chase
-        //         new CheckAlert(),
-        //         new TaskChase(),
-        //     }),
-        //     new Sequence(new List<Node>
-        //     {
-        //         // Investigate
-        //         new CheckSuspicious(),
-        //         new TaskInvestigate(),
-        //     }),
-        //     // Patrol
-        //     new TaskPatrol(waypoints, transform, agent),
-        // });
+        Node root = new Selector(new List<Node>
+        {
+            new Sequence(new List<Node>
+            {
+                // Chase
+                new CheckAlert(fov),
+                new TaskInvestigate(agent, fov),
+            }),
+            new Sequence(new List<Node>
+            {
+                // Investigate
+                new CheckSuspicious(fov),
+                new TaskInvestigate(agent, fov),
+            }),
+            // Patrol
+            new TaskPatrol(waypoints, transform, agent),
+        });
 
         return root;
     }
