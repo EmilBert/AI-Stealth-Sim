@@ -15,23 +15,24 @@ public class TaskPatrol : Node
 
     private Transform       _transform;
     private Transform[]     _waypoints;
-    private NavMeshAgent    _agent;
+    //private NavMeshAgent    _agent;
 
     public TaskPatrol(Transform[] waypoints, Transform transform, NavMeshAgent agent)
     {
         _waypoints = waypoints;
         _transform = transform;
-        _agent = agent;
-        _agent.SetDestination(_waypoints[_currentWaypointIndex].position);
+        // _agent = agent;
+        // _agent.SetDestination(_waypoints[_currentWaypointIndex].position);
     }
 
     public override NodeState Evaluate()
     {
         Transform wp = _waypoints[_currentWaypointIndex];
+        wp.position = new Vector3(wp.position.x, 0.0f, wp.position.z);
         if (new Vector2(_transform.position.x - wp.position.x, _transform.position.z - wp.position.z).sqrMagnitude < 0.01f)
         {
             if(_waiting) {
-                _agent.speed = 0.0f;
+                //_agent.speed = 0.0f;
                 //At waypoint, waiting.
                 //Wait for the wait timer to finish.
                 _waitCounter += Time.deltaTime;
@@ -43,15 +44,19 @@ public class TaskPatrol : Node
             else {
                 //At waypoint, not waiting.
                 //Set new waypoint and walk towards it.
-                //_transform.position = wp.position;
+                _transform.position = wp.position;
                 _waitCounter = 0f;
                 _waiting = true;
-                _agent.speed = GuardBT.speed;
+                //_agent.speed = GuardBT.speed;
 
                 _currentWaypointIndex = (_currentWaypointIndex + 1) % _waypoints.Length;
-                _agent.SetDestination(_waypoints[_currentWaypointIndex].position);
+                _transform.LookAt(_waypoints[_currentWaypointIndex].position);
+                //_agent.SetDestination(_waypoints[_currentWaypointIndex].position);
                 //Debug.Log("New Destination: " + _waypoints[_currentWaypointIndex].position);
             }
+        }
+        else {
+            _transform.position = Vector3.MoveTowards(_transform.position, wp.position, Mathf.Min(GuardBT.speed * Time.deltaTime, new Vector2(_transform.position.x - wp.position.x, _transform.position.z - wp.position.z).magnitude));
         }
     
         state = NodeState.RUNNING;

@@ -18,13 +18,13 @@ public class Agent : MonoBehaviour
         StartCoroutine(updateAnimState());
     }
 
-    public void GiveGoal(Vector3 newGoal, int urgency){
-        //TODO: Remove all references to this
-        goal = newGoal;
-        agent.destination = newGoal;
-        if(urgency >= 0 && urgency < speeds.Length) agent.speed = speeds[urgency];
-        else agent.speed = speeds[0];
-    }
+    // public void GiveGoal(Vector3 newGoal, int urgency){
+    //     //TODO: Remove all references to this
+    //     goal = newGoal;
+    //     agent.destination = newGoal;
+    //     if(urgency >= 0 && urgency < speeds.Length) agent.speed = speeds[urgency];
+    //     else agent.speed = speeds[0];
+    // }
 
     IEnumerator updateAnimState(){
         while(true){
