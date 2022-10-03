@@ -23,7 +23,6 @@ public class PlayerBT : BTree
         //      new TaskHide(),
         //  }),
             new TaskGoToObjective(target, agent),
-            new TaskGoToObjective(target, agent),
         });
 
         return root;
