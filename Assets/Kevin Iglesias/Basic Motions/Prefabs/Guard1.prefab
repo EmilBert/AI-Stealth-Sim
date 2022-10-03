@@ -552,7 +552,7 @@ GameObject:
   - component: {fileID: 4759721911903040}
   - component: {fileID: 95509902755735526}
   m_Layer: 0
-  m_Name: BasicMotionsDummy
+  m_Name: Guard1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2156,7 +2156,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5cab5ad65f7b5eb479dc46b28d03a732, type: 2}
+  - {fileID: 2100000, guid: ccc50d631d14df84a982c4f4acd00013, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
