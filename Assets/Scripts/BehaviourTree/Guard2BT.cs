@@ -1,25 +1,22 @@
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.AI;
 using UnityEngine;
 using BehaviourTree;
+using System.Runtime.CompilerServices;
 
-public class GuardBT : BTree
+public class Guard2BT : GuardBT
 {
-    public Transform[] waypoints;
-    protected float speed = 3.5f;
-    
-    protected Transform transform;
-    protected NavMeshAgent agent;
-    protected FieldOfView fov;
-
+    // Start is called before the first frame update
+    private float rotationSpeed = 0.02f;
     protected override Node SetupTree()
     {
-        agent = GetComponent<NavMeshAgent>();
+        
+        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         fov = GetComponent<FieldOfView>();
         transform = GetComponent<Transform>();
-
-        //Node root = new TaskPatrol(waypoints, transform, agent);
-
+        this.speed = 4.5f;
+        
+        
         Node root = new Selector(new List<Node>
         {
             new Sequence(new List<Node>
@@ -34,8 +31,8 @@ public class GuardBT : BTree
                 new CheckSuspicious(fov),
                 new TaskInvestigate(agent, fov),
             }),
-            // Patrol
-            new TaskPatrol(waypoints, transform, agent, speed),
+            // Stationary rotation
+            new LookAround(agent, transform, rotationSpeed),
         });
 
         return root;

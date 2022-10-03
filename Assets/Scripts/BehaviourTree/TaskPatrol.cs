@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-
 using BehaviourTree;
 
 public class TaskPatrol : Node
@@ -15,12 +14,14 @@ public class TaskPatrol : Node
 
     private Transform       _transform;
     private Transform[]     _waypoints;
+    private float _speed;
     //private NavMeshAgent    _agent;
 
-    public TaskPatrol(Transform[] waypoints, Transform transform, NavMeshAgent agent)
+    public TaskPatrol(Transform[] waypoints, Transform transform, NavMeshAgent agent, float speed)
     {
         _waypoints = waypoints;
         _transform = transform;
+        _speed = speed;
         // _agent = agent;
         // _agent.SetDestination(_waypoints[_currentWaypointIndex].position);
     }
@@ -56,7 +57,7 @@ public class TaskPatrol : Node
             }
         }
         else {
-            _transform.position = Vector3.MoveTowards(_transform.position, wp.position, Mathf.Min(GuardBT.speed * Time.deltaTime, new Vector2(_transform.position.x - wp.position.x, _transform.position.z - wp.position.z).magnitude));
+            _transform.position = Vector3.MoveTowards(_transform.position, wp.position, Mathf.Min(_speed * Time.deltaTime, new Vector2(_transform.position.x - wp.position.x, _transform.position.z - wp.position.z).magnitude));
         }
     
         state = NodeState.RUNNING;
