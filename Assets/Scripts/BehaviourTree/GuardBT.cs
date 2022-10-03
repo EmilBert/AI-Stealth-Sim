@@ -46,6 +46,8 @@ public class GuardBT : BTree
             new TaskPatrol(waypoints, transform, agent),
         });
 
+        root.SetData("timer", 0.0f);
+
         return root;
     }
 }

@@ -50,12 +50,12 @@ public class TaskPatrol : Node
                 //_agent.speed = GuardBT.speed;
 
                 _currentWaypointIndex = (_currentWaypointIndex + 1) % _waypoints.Length;
-                _transform.LookAt(_waypoints[_currentWaypointIndex].position);
                 //_agent.SetDestination(_waypoints[_currentWaypointIndex].position);
                 //Debug.Log("New Destination: " + _waypoints[_currentWaypointIndex].position);
             }
         }
         else {
+            _transform.LookAt(_waypoints[_currentWaypointIndex].position);
             _transform.position = Vector3.MoveTowards(_transform.position, wp.position, Mathf.Min(GuardBT.speed * Time.deltaTime, new Vector2(_transform.position.x - wp.position.x, _transform.position.z - wp.position.z).magnitude));
         }
     

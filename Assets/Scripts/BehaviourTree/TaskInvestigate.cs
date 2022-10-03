@@ -30,9 +30,14 @@ public class TaskInvestigate : Node
 
         
             _agent.SetDestination(_pos);
+            Debug.Log(_agent.destination);
+            Debug.Log(_agent.remainingDistance);
             
             if(_agent.remainingDistance <= 0.2f){
                 Debug.Log("At Target");
+                Node root = this;
+                while (root.parent != null) root = root.parent;
+                root.SetData("timer", 0f);
                 return NodeState.FAILURE;
             }
             Debug.Log("Moving towards target");

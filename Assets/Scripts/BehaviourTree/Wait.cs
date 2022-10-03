@@ -6,7 +6,6 @@ using BehaviourTree;
 
 public class Wait : Node
 {
-    float timer = 0f;
     float waitTime = 0f;
     bool timerReached = false;
     NavMeshAgent _agent;
@@ -21,12 +20,16 @@ public class Wait : Node
     
     public override NodeState Evaluate()
     {
+        Node root = this;
+        while (root.parent != null) root = root.parent;
+        float timer = (float)root.GetData("timer");
         if (!timerReached) 
         {
             timer += Time.deltaTime;
         }
         else
         {
+            timerReached = false;
             return NodeState.SUCCESS;
         }
 
@@ -38,6 +41,7 @@ public class Wait : Node
             return NodeState.FAILURE;
         }else{
             _agent.isStopped = true;
+            root.SetData("timer", timer);
             return NodeState.RUNNING;
         }
     }
