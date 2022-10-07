@@ -34,7 +34,7 @@ public class Guard2BT : GuardBT
                 new TaskInvestigate(agent, fov),
             }),
             // Stationary rotation 
-            new Sequence(new List<Node>
+            new Selector(new List<Node>
             {
                 new Wait(5.0f, agent),
                 new LookAround(agent, transform, rotationSpeed),

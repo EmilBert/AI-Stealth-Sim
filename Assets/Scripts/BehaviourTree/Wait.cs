@@ -15,9 +15,6 @@ public class Wait : Node
     {
         timeToWait = seconds;
         _agent = agent;
-        Node root = this;
-        while(root.parent != null) root = root.parent;
-        GetRoot().SetData("resetTimer", false);
     }
 
     private Node GetRoot(){
@@ -27,6 +24,10 @@ public class Wait : Node
     } 
     public override NodeState Evaluate()
     {
+        Debug.Log("time: " + time);
+        Debug.Log(time >= timeToWait);
+        time += Time.deltaTime;
+        
         Node root = GetRoot();
         Debug.Log(root.GetData("resetTimer") != null && (bool)root.GetData("resetTimer"));
         
@@ -34,7 +35,7 @@ public class Wait : Node
             time = 0f;
             timerReached = false;
             root.ClearData("resetTimer");
-            return NodeState.FAILURE;
+            return NodeState.SUCCESS;
         }
 
         // TIMER REACHED
@@ -42,7 +43,7 @@ public class Wait : Node
             Debug.Log("Timer reached");
             root.ClearData("resetTimer");
             timerReached = true;
-            return NodeState.SUCCESS;
+            return NodeState.FAILURE;
         }
         // STILL WAITING
         return NodeState.RUNNING;
