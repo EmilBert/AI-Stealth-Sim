@@ -6,61 +6,45 @@ using BehaviourTree;
 
 public class Wait : Node
 {
-    float timer;
-    float waitTime = 0f;
+    float time;
+    float timeToWait;
     bool timerReached = false;
     NavMeshAgent _agent;
 
     public Wait(float seconds, NavMeshAgent agent)
     {
-        Debug.Log("Wait start");
-        timerReached = false;
-        waitTime = seconds;
+        timeToWait = seconds;
         _agent = agent;
-        timer = 0f;
-    }
-    
-    public override NodeState Evaluate()
-    {
         Node root = this;
         while(root.parent != null) root = root.parent;
+        GetRoot().SetData("resetTimer", false);
+    }
+
+    private Node GetRoot(){
+        Node root = this;
+        while(root.parent != null) root = root.parent;
+        return root;
+    } 
+    public override NodeState Evaluate()
+    {
+        Node root = GetRoot();
+        Debug.Log(root.GetData("resetTimer") != null && (bool)root.GetData("resetTimer"));
         
-        timer += Time.deltaTime;
-        
-        if(timer >= waitTime){
+        if(root.GetData("resetTimer") != null && (bool)root.GetData("resetTimer")){
+            time = 0f;
+            timerReached = false;
+            root.ClearData("resetTimer");
+            return NodeState.FAILURE;
+        }
+
+        // TIMER REACHED
+        if(time >= timeToWait){
+            Debug.Log("Timer reached");
+            root.ClearData("resetTimer");
             timerReached = true;
-            Debug.Log("Wait over");
-             //_agent.isStopped = false;
-             return NodeState.FAILURE;
-        }else
-        {
-            //_agent.isStopped = true;
-            //root.SetData("timer", timer);
-            return NodeState.RUNNING;
-        } 
-
-
-
-        // if (!timerReached && timer > waitTime)
-        // {
-        //     Debug.Log("Wait over");
-        //     timerReached = true;
-        //     //_agent.isStopped = false;
-        //     return NodeState.FAILURE;
-        // }else{
-        //     //_agent.isStopped = true;
-        //     root.SetData("timer", timer);
-        //     return NodeState.RUNNING;
-        // }
-
-        // if (!timerReached) 
-        // {
-        //     timer += Time.deltaTime;
-        // }
-        // else
-        // {
-        //     timerReached = false;
-        //     return NodeState.SUCCESS;
-        // }
+            return NodeState.SUCCESS;
+        }
+        // STILL WAITING
+        return NodeState.RUNNING;
     }
 }

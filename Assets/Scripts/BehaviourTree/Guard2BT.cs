@@ -15,9 +15,9 @@ public class Guard2BT : GuardBT
 
     protected override Node SetupTree()
     {
-        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
-        fov = GetComponent<FieldOfView>();
-        transform = GetComponent<Transform>();
+        agent       = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        fov         = GetComponent<FieldOfView>();
+        transform   = GetComponent<Transform>();
 
         Node root = new Selector(new List<Node>
         {
@@ -34,11 +34,11 @@ public class Guard2BT : GuardBT
                 new TaskInvestigate(agent, fov),
             }),
             // Stationary rotation 
-            new Selector(new List<Node>
-                {
-                    new Wait(2.0f, agent),
-                    new LookAround(agent, transform, rotationSpeed),
-                })
+            new Sequence(new List<Node>
+            {
+                new Wait(5.0f, agent),
+                new LookAround(agent, transform, rotationSpeed),
+            })
         });
         return root;
     }
