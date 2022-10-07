@@ -26,17 +26,23 @@ public class GuardBT : BTree
             {
                 // Chase
                 new CheckAlert(fov),
-                new TaskInvestigate(agent, fov),
+                new TaskChase(fov, agent, transform),
             }),
             new Sequence(new List<Node>
             {
                 // Investigate
-                new CheckSuspicious(fov),
-                new TaskInvestigate(agent, fov),
+                new CheckSuspicious(fov, transform, agent),
+                new Selector(new List<Node>
+                {
+                    new Wait(5, agent),
+                    new TaskInvestigate(agent, fov),
+                })
             }),
             // Patrol
             new TaskPatrol(waypoints, transform, agent, speed),
         });
+
+        root.SetData("timer", 0.0f);
 
         return root;
     }

@@ -36,7 +36,7 @@ namespace BehaviourTree
 
         private void _Attach(Node child)
         {
-            UnityEngine.Debug.Log(this);
+            //UnityEngine.Debug.Log(this);
             child.parent = this;
             children.Add(child);
         }

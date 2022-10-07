@@ -7,12 +7,12 @@ using UnityEngine.AI;
 
 public class Agent : MonoBehaviour
 {   
-    public Vector3 goal;
+    public Vector3 lastPos;
     private Animator animator;
     private NavMeshAgent agent;
-    private readonly float[] speeds = {0.0f, 3.5f}; //TODO: Remove
     
     void Start () {
+        lastPos = transform.position;
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         StartCoroutine(updateAnimState());
@@ -29,9 +29,13 @@ public class Agent : MonoBehaviour
     IEnumerator updateAnimState(){
         while(true){
             //Default: No target available, should not move.
-            bool shouldMove = agent.speed > 0.1f;
+            bool shouldMove;
+            if (agent.enabled && agent.speed > 0.1f) shouldMove = true;
+            else shouldMove = (lastPos - transform.position).sqrMagnitude > 0.1;
             //TODO: If we have several agent speeds, probably change this to int or float
             animator.SetBool("moving", shouldMove);
+            Debug.Log(lastPos - transform.position);
+            lastPos = transform.position;
             yield return new WaitForSeconds(.1f);
         }
     }
