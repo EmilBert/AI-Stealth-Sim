@@ -25,23 +25,24 @@ public class TaskInvestigate : Node
 
     public override NodeState Evaluate()
     {
+        _agent.enabled = true;
         _target = _fov.GetCurrentTarget();
         _pos = _fov.GetLastSeenPosition();
 
         
-            _agent.SetDestination(_pos);
-            Debug.Log(_agent.destination);
-            Debug.Log(_agent.remainingDistance);
+        _agent.SetDestination(_pos);
+        Debug.Log(_agent.destination);
+        Debug.Log(_agent.remainingDistance);
             
-            if(_agent.remainingDistance <= 0.2f){
-                Debug.Log("At Target");
-                Node root = this;
-                while (root.parent != null) root = root.parent;
-                root.SetData("timer", 0f);
-                return NodeState.FAILURE;
-            }
-            Debug.Log("Moving towards target");
-            return NodeState.RUNNING;
+        if(_agent.remainingDistance <= 0.2f){
+            Debug.Log("At Target");
+            Node root = this;
+            while (root.parent != null) root = root.parent;
+            root.SetData("timer", 0f);
+            return NodeState.FAILURE;
+        }
+        Debug.Log("Moving towards target");
+        return NodeState.RUNNING;
         
     }
 

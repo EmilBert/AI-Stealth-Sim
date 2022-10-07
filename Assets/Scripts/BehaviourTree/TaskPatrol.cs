@@ -15,18 +15,20 @@ public class TaskPatrol : Node
 
     private Transform       _transform;
     private Transform[]     _waypoints;
-    //private NavMeshAgent    _agent;
+    private NavMeshAgent    _agent;
+    private Agent           _animAgent;
 
     public TaskPatrol(Transform[] waypoints, Transform transform, NavMeshAgent agent)
     {
         _waypoints = waypoints;
         _transform = transform;
-        // _agent = agent;
+        _agent = agent;
         // _agent.SetDestination(_waypoints[_currentWaypointIndex].position);
     }
 
     public override NodeState Evaluate()
     {
+        _agent.enabled = false;
         Transform wp = _waypoints[_currentWaypointIndex];
         wp.position = new Vector3(wp.position.x, 0.0f, wp.position.z);
         if (new Vector2(_transform.position.x - wp.position.x, _transform.position.z - wp.position.z).sqrMagnitude < 0.01f)

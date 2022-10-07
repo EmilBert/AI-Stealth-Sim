@@ -26,7 +26,6 @@ public class TaskChase : Node
             _transform.rotation = Quaternion.LookRotation(lookDir);
 
             Debug.Log("Chasing");
-            _agent.enabled = true;
             _agent.speed = 5f;
             _agent.SetDestination(_fov.GetCurrentTarget().position);
             return NodeState.SUCCESS;
