@@ -6,44 +6,46 @@ using BehaviourTree;
 
 public class Wait : Node
 {
-    float waitTime = 0f;
+    float time;
+    float timeToWait;
     bool timerReached = false;
     NavMeshAgent _agent;
 
     public Wait(float seconds, NavMeshAgent agent)
     {
-        Debug.Log("Wait start");
-        timerReached = false;
-        waitTime = seconds;
+        timeToWait = seconds;
         _agent = agent;
     }
-    
+
+    private Node GetRoot(){
+        Node root = this;
+        while(root.parent != null) root = root.parent;
+        return root;
+    } 
     public override NodeState Evaluate()
     {
-        Node root = this;
-        while (root.parent != null) root = root.parent;
-        float timer = (float)root.GetData("timer");
-        if (!timerReached) 
-        {
-            timer += Time.deltaTime;
-        }
-        else
-        {
+        Debug.Log("time: " + time);
+        Debug.Log(time >= timeToWait);
+        time += Time.deltaTime;
+        
+        Node root = GetRoot();
+        Debug.Log(root.GetData("resetTimer") != null && (bool)root.GetData("resetTimer"));
+        
+        if(root.GetData("resetTimer") != null && (bool)root.GetData("resetTimer")){
+            time = 0f;
             timerReached = false;
+            root.ClearData("resetTimer");
             return NodeState.SUCCESS;
         }
 
-        if (!timerReached && timer > waitTime)
-        {
-            Debug.Log("Wait over");
+        // TIMER REACHED
+        if(time >= timeToWait){
+            Debug.Log("Timer reached");
+            root.ClearData("resetTimer");
             timerReached = true;
-            _agent.isStopped = false;
             return NodeState.FAILURE;
-        }else{
-            _agent.isStopped = true;
-            root.SetData("timer", timer);
-            return NodeState.RUNNING;
         }
+        // STILL WAITING
+        return NodeState.RUNNING;
     }
-
 }

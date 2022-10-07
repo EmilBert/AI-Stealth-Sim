@@ -7,8 +7,8 @@ public class GuardBT : BTree
 {
     public Transform[] waypoints;
     public static float speed = 3.5f;
-
-    protected Transform guardTransform;
+    
+    protected Transform transform;
     protected NavMeshAgent agent;
     protected FieldOfView fov;
     private NavMeshObstacle[] obstacles;
@@ -52,7 +52,7 @@ public class GuardBT : BTree
                 })
             }),
             // Patrol
-            new TaskPatrol(waypoints, guardTransform, agent, obstacles),
+            new TaskPatrol(waypoints, transform, agent, speed),
         });
 
         root.SetData("timer", 0.0f);
