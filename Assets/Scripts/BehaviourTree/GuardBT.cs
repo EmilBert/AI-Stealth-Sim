@@ -6,7 +6,7 @@ using BehaviourTree;
 public class GuardBT : BTree
 {
     public Transform[] waypoints;
-    protected float speed = 3.5f;
+    public static float speed = 3.5f;
     
     protected Transform transform;
     protected NavMeshAgent agent;

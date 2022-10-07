@@ -6,6 +6,7 @@ using BehaviourTree;
 
 public class Wait : Node
 {
+    float timer;
     float waitTime = 0f;
     bool timerReached = false;
     NavMeshAgent _agent;
@@ -16,34 +17,50 @@ public class Wait : Node
         timerReached = false;
         waitTime = seconds;
         _agent = agent;
+        timer = 0f;
     }
     
     public override NodeState Evaluate()
     {
         Node root = this;
-        while (root.parent != null) root = root.parent;
-        float timer = (float)root.GetData("timer");
-        if (!timerReached) 
-        {
-            timer += Time.deltaTime;
-        }
-        else
-        {
-            timerReached = false;
-            return NodeState.SUCCESS;
-        }
-
-        if (!timerReached && timer > waitTime)
-        {
-            Debug.Log("Wait over");
+        while(root.parent != null) root = root.parent;
+        
+        timer += Time.deltaTime;
+        
+        if(timer >= waitTime){
             timerReached = true;
-            _agent.isStopped = false;
-            return NodeState.FAILURE;
-        }else{
-            _agent.isStopped = true;
-            root.SetData("timer", timer);
+            Debug.Log("Wait over");
+             //_agent.isStopped = false;
+             return NodeState.FAILURE;
+        }else
+        {
+            //_agent.isStopped = true;
+            //root.SetData("timer", timer);
             return NodeState.RUNNING;
-        }
-    }
+        } 
 
+
+
+        // if (!timerReached && timer > waitTime)
+        // {
+        //     Debug.Log("Wait over");
+        //     timerReached = true;
+        //     //_agent.isStopped = false;
+        //     return NodeState.FAILURE;
+        // }else{
+        //     //_agent.isStopped = true;
+        //     root.SetData("timer", timer);
+        //     return NodeState.RUNNING;
+        // }
+
+        // if (!timerReached) 
+        // {
+        //     timer += Time.deltaTime;
+        // }
+        // else
+        // {
+        //     timerReached = false;
+        //     return NodeState.SUCCESS;
+        // }
+    }
 }
