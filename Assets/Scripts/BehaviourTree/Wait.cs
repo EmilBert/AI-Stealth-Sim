@@ -24,13 +24,11 @@ public class Wait : Node
     } 
     public override NodeState Evaluate()
     {
-        Debug.Log("time: " + time);
-        Debug.Log(time >= timeToWait);
+        // Tick timer
         time += Time.deltaTime;
-        
         Node root = GetRoot();
-        Debug.Log(root.GetData("resetTimer") != null && (bool)root.GetData("resetTimer"));
-        
+    
+        // SHOULD WE RESET TIMER?
         if(root.GetData("resetTimer") != null && (bool)root.GetData("resetTimer")){
             time = 0f;
             timerReached = false;
@@ -40,7 +38,6 @@ public class Wait : Node
 
         // TIMER REACHED
         if(time >= timeToWait){
-            Debug.Log("Timer reached");
             root.ClearData("resetTimer");
             timerReached = true;
             return NodeState.FAILURE;

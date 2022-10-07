@@ -8,7 +8,7 @@ public class GuardBT : BTree
     public Transform[] waypoints;
     public static float speed = 3.5f;
     
-    protected Transform transform;
+    protected Transform guardTransform;
     protected NavMeshAgent agent;
     protected FieldOfView fov;
     private NavMeshObstacle[] obstacles;
@@ -21,18 +21,9 @@ public class GuardBT : BTree
         obstacles = GetComponentsInChildren<NavMeshObstacle>();
 
         obstacles[0].gameObject.transform.Rotate(Vector3.up, fov.viewAngle / 2 * 0.7f);
-        obstacles[0].center = new Vector3(0, 0, fov.viewRadius / 2);
-        obstacles[0].size = new Vector3(fov.viewRadius / 2.5f, 0.5f, fov.viewRadius);
-
-        obstacles[1].center = new Vector3(0, 0, fov.viewRadius / 2);
-        obstacles[1].size = new Vector3(fov.viewRadius / 2.5f, 0.5f, fov.viewRadius);
-
         obstacles[2].gameObject.transform.Rotate(Vector3.up, -fov.viewAngle / 2 * 0.7f);
-        obstacles[2].center = new Vector3(0, 0, fov.viewRadius / 2);
-        obstacles[2].size = new Vector3(fov.viewRadius / 2.5f, 0.5f, fov.viewRadius);
 
         //Node root = new TaskPatrol(waypoints, transform, agent);
-
         Node root = new Selector(new List<Node>
         {
             new Sequence(new List<Node>
@@ -47,12 +38,12 @@ public class GuardBT : BTree
                 new CheckSuspicious(fov, guardTransform),
                 new Selector(new List<Node>
                 {
-                    new Wait(5, agent),
+                    new Wait(5.0f, agent),
                     new TaskInvestigate(agent, fov, obstacles),
                 })
             }),
             // Patrol
-            new TaskPatrol(waypoints, transform, agent, speed),
+            new TaskPatrol(waypoints, guardTransform, agent, obstacles),
         });
 
         root.SetData("timer", 0.0f);
