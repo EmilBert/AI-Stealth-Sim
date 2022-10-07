@@ -13,22 +13,27 @@ public class TaskPatrol : Node
     private float _waitCounter = 0f;
     private bool _waiting = false;
 
-    private Transform       _transform;
-    private Transform[]     _waypoints;
-    private NavMeshAgent    _agent;
-    private Agent           _animAgent;
+    private Transform           _transform;
+    private Transform[]         _waypoints;
+    private NavMeshAgent        _agent;
+    private NavMeshObstacle[]   _obstacles;
 
-    public TaskPatrol(Transform[] waypoints, Transform transform, NavMeshAgent agent)
+    public TaskPatrol(Transform[] waypoints, Transform transform, NavMeshAgent agent, NavMeshObstacle[] obstacles)
     {
         _waypoints = waypoints;
         _transform = transform;
         _agent = agent;
+        _obstacles = obstacles;
         // _agent.SetDestination(_waypoints[_currentWaypointIndex].position);
     }
 
     public override NodeState Evaluate()
     {
         _agent.enabled = false;
+        foreach (NavMeshObstacle _obstacle in _obstacles)
+        {
+            _obstacle.enabled = true;
+        }
         Transform wp = _waypoints[_currentWaypointIndex];
         wp.position = new Vector3(wp.position.x, 0.0f, wp.position.z);
         if (new Vector2(_transform.position.x - wp.position.x, _transform.position.z - wp.position.z).sqrMagnitude < 0.01f)
@@ -58,7 +63,8 @@ public class TaskPatrol : Node
         }
         else {
             _transform.LookAt(_waypoints[_currentWaypointIndex].position);
-            _transform.position = Vector3.MoveTowards(_transform.position, wp.position, Mathf.Min(GuardBT.speed * Time.deltaTime, new Vector2(_transform.position.x - wp.position.x, _transform.position.z - wp.position.z).magnitude));
+            _transform.position = Vector3.MoveTowards(_transform.position, wp.position, 
+                Mathf.Min(GuardBT.speed * Time.deltaTime, new Vector2(_transform.position.x - wp.position.x, _transform.position.z - wp.position.z).magnitude));
         }
     
         state = NodeState.RUNNING;
