@@ -24,21 +24,17 @@ public class FieldOfView : MonoBehaviour
     void Start(){
         agent = GetComponent<Agent>();
     }
-
     public Transform GetCurrentTarget(){
         if(currentTarget) return currentTarget;
         return null;
     }
-
     public Vector3 GetLastSeenPosition(){
         if(lastSeenPosition != null) return lastSeenPosition;
         return Vector3.zero;
     }
-
     public GuardStates GetState(){
         return state;
     }
-
     public GuardStates FindVisibleTargets(){
         visibleTargets.Clear();
         Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, (susPercentage/100)*viewRadius, targetMask);

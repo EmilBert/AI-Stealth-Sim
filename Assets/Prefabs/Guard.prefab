@@ -625,7 +625,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7882395299498038237}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ObstacleParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -660,7 +660,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7882395299553789420}
   - component: {fileID: 7882395299553789419}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ObstacleLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -708,7 +708,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7882395300126097885}
   - component: {fileID: 7882395300126097884}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ObstacleCenter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -756,7 +756,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7882395300611581970}
   - component: {fileID: 7882395300611581969}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ObstacleRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}

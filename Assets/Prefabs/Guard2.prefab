@@ -1113,7 +1113,7 @@ MonoBehaviour:
   viewAngle: 90
   targetMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   obstacleMask:
     serializedVersion: 2
     m_Bits: 64
@@ -2455,7 +2455,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5925804926318647495}
   - component: {fileID: 2737809173751673357}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ObstacleRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2503,7 +2503,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6056846856684044629}
   - component: {fileID: 4716202426164052089}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ObstacleLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2550,7 +2550,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6712890437451182116}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ObstacleParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2585,7 +2585,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7338531213221571658}
   - component: {fileID: 1624229562987415073}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ObstacleCenter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
