@@ -8,6 +8,8 @@ public class TaskGoToObjective : Node
 {
     private NavMeshAgent _agent;
     private Transform _target;
+    float timer = 0f;
+    readonly float pathUpdate = 0.1f;
 
     public TaskGoToObjective(Transform target, NavMeshAgent agent) {
         _agent = agent;
@@ -17,7 +19,17 @@ public class TaskGoToObjective : Node
 
     public override NodeState Evaluate()
     {
-        state = NodeState.RUNNING;
-        return state;
+        if (timer >= pathUpdate) 
+        {
+            timer = 0f;
+            _agent.autoRepath = true;
+        }
+        else
+        {
+            timer += Time.deltaTime;
+            _agent.autoRepath = false;
+        }
+        return NodeState.RUNNING;
     }
+
 }
