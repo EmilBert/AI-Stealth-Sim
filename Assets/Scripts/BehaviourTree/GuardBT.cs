@@ -11,7 +11,7 @@ public class GuardBT : BTree
     protected Transform guardTransform;
     protected NavMeshAgent agent;
     protected FieldOfView fov;
-    private NavMeshObstacle[] obstacles;
+    protected NavMeshObstacle[] obstacles;
 
     protected override Node SetupTree()
     {
