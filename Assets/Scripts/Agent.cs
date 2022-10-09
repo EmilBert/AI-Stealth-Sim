@@ -56,7 +56,8 @@ public class Agent : MonoBehaviour
                     Vector3 lookDir = transform.forward;
                     Vector3 betterLookDir = new Vector3(lookDir.x, 0, lookDir.z);
                     betterLookDir = obstacle.transform.localRotation * betterLookDir;
-                    if (Physics.Raycast(transform.position, betterLookDir, out hit, fov.viewRadius, fov.obstacleMask))
+                    float maxDistance = (fov.viewRadius * fov.susPercentage) / 1.5f;
+                    if (Physics.Raycast(transform.position, betterLookDir, out hit, maxDistance, fov.obstacleMask))
                     {
                         obstacle.center = new Vector3(0, 0, hit.distance / 2);
                         obstacle.size = new Vector3(hit.distance / 2.5f, 0.5f, hit.distance);
@@ -64,8 +65,8 @@ public class Agent : MonoBehaviour
                     }
                     else
                     {
-                        obstacle.center = new Vector3(0, 0, fov.viewRadius / 2);
-                        obstacle.size = new Vector3(fov.viewRadius / 2.5f, 0.5f, fov.viewRadius);
+                        obstacle.center = new Vector3(0, 0, maxDistance / 2);
+                        obstacle.size = new Vector3(maxDistance / 2.5f, 0.5f, maxDistance);
                     }
                 }
             }
