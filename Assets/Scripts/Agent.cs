@@ -56,7 +56,7 @@ public class Agent : MonoBehaviour
                     Vector3 lookDir = transform.forward;
                     Vector3 betterLookDir = new Vector3(lookDir.x, 0, lookDir.z);
                     betterLookDir = obstacle.transform.localRotation * betterLookDir;
-                    float maxDistance = (fov.viewRadius * fov.susPercentage) / 1.5f;
+                    float maxDistance = (fov.viewRadius * fov.susPercentage / 100) / 1.1f;
                     if (Physics.Raycast(transform.position, betterLookDir, out hit, maxDistance, fov.obstacleMask))
                     {
                         obstacle.center = new Vector3(0, 0, hit.distance / 2);
