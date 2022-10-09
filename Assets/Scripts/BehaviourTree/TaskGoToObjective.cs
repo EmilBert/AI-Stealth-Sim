@@ -7,30 +7,28 @@ using BehaviourTree;
 public class TaskGoToObjective : Node
 {
     private NavMeshAgent _agent;
-    private Transform _target;
     private Transform _playerTransform;
-    float timer = 0f;
-    readonly float pathUpdate = 0.1f;
+    private int _currentObjective;
+    private List<Transform> _objectives;
 
-    public TaskGoToObjective(Transform target, NavMeshAgent agent, Transform playerTransform) {
+    public TaskGoToObjective(List<Transform> objectives, NavMeshAgent agent, Transform playerTransform) {
         _agent = agent;
-        _target = target;
+        _objectives = objectives;
         _playerTransform = playerTransform;
-        _agent.SetDestination(_target.position);
+
+        _currentObjective = Random.Range(0, _objectives.Count);
+            _agent.SetDestination(_objectives[_currentObjective].position);
     }
 
     public override NodeState Evaluate()
     {
-        if (!_agent.isOnNavMesh){
-            NavMeshHit hit = new NavMeshHit();
-            _agent.FindClosestEdge(out hit);
-
-            _agent.enabled = false;
-            _playerTransform.LookAt(hit.position);
-            _playerTransform.position = Vector3.MoveTowards(_playerTransform.position, hit.position, 
-                Mathf.Min(GuardBT.speed * Time.deltaTime, new Vector2(_playerTransform.position.x - hit.position.x, _playerTransform.position.z - hit.position.z).magnitude));
+        if((_playerTransform.position - _objectives[_currentObjective].position).sqrMagnitude < 1f && _objectives.Count > 1)
+        {
+            Debug.Log("Objective reached");
+            _objectives.RemoveAt(_currentObjective);
+            _currentObjective = Random.Range(0, _objectives.Count);
+            _agent.SetDestination(_objectives[_currentObjective].position);
         }
-        else _agent.enabled = true;
         return NodeState.RUNNING;
     }
 

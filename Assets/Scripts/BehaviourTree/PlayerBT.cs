@@ -8,9 +8,11 @@ public class PlayerBT : BTree
 {
     // Start is called before the first frame update
     [SerializeField]
-    private Transform target;
-    private Transform playerTransform;
-    private NavMeshAgent agent;
+    public List<Transform>  objectives;
+    private Transform       playerTransform;
+    private NavMeshAgent    agent;
+
+
     protected override Node SetupTree()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -24,7 +26,8 @@ public class PlayerBT : BTree
         //      new CheckChased(),
         //      new TaskHide(),
         //  }),
-            new TaskGoToObjective(target, agent, playerTransform),
+        new TaskGoToObjective(objectives, agent, playerTransform),
+        
         });
 
         return root;
