@@ -11,11 +11,11 @@ public class PlayerBT : BTree
     public List<Transform>  objectives;
     private Transform       playerTransform;
     private NavMeshAgent    agent;
-
+    public DetectionStatus detectionStatus;
 
     protected override Node SetupTree()
     {
-        agent = GetComponent<NavMeshAgent>();
+        agent           = GetComponent<NavMeshAgent>();
         playerTransform = GetComponent<Transform>();
 
         Node root = new Selector(new List<Node>

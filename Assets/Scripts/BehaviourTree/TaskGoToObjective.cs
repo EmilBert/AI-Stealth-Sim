@@ -22,7 +22,8 @@ public class TaskGoToObjective : Node
 
     public override NodeState Evaluate()
     {
-        if((_playerTransform.position - _objectives[_currentObjective].position).sqrMagnitude < 1f && _objectives.Count > 1)
+        Debug.Log(_objectives.Count);
+        if((_playerTransform.position - _objectives[_currentObjective].position).sqrMagnitude < 2f && _objectives.Count > 1)
         {
             Debug.Log("Objective reached");
             _objectives.RemoveAt(_currentObjective);

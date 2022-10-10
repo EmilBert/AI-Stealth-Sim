@@ -23,6 +23,7 @@ public class CheckSuspicious : Node
 
         if(_state == GuardStates.SUSPICIOUS)
         {
+            _fov.GetCurrentTarget().gameObject.GetComponent<DetectionStatus>().SetDetected(true);
             var lookDir = _fov.GetLastSeenPosition() - _transform.position;
             lookDir = new Vector3(lookDir.x, 0, lookDir.z);
             _transform.rotation = Quaternion.LookRotation(lookDir);

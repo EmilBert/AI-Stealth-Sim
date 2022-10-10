@@ -35,7 +35,7 @@ public class TaskInvestigate : Node
         _target = _fov.GetCurrentTarget();
         _pos = _fov.GetLastSeenPosition();
 
-        
+        _fov.GetCurrentTarget().gameObject.GetComponent<DetectionStatus>().SetDetected(true);
         _agent.SetDestination(_pos);
         Debug.Log(_agent.destination);
         Debug.Log(_agent.remainingDistance);
