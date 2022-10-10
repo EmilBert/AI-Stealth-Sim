@@ -22,34 +22,77 @@ public class TaskHide : Node
 
     public override NodeState Evaluate()
     {
-        int hits = Physics.OverlapSphereNonAlloc(_transform.position, 2.0f, colliders, _mask); // Hur många obstacles finns i närheten?
+        Node root = this;
+        while (root.parent != null) root = root.parent;
+        root.SetData("resetTimer", true);
+        Debug.Log("Gotta hide");
+        for (int i = 0; i < colliders.Length; i++) colliders[i] = null;
+        int hits = Physics.OverlapSphereNonAlloc(_transform.position, 10.0f, colliders, _mask); // Hur många obstacles finns i närheten?
+        int hitReductions = 0;
 
-        float thereshold = -0.5f * _status.GetDetections().Count; // Hur bra behöver ett gömställe vara?
+        for (int i = 0; i < hits; i++) {
+            if (Vector3.Distance(colliders[i].transform.position, _status.GetDetections()[0].transform.position) < 4f) {
+                colliders[i] = null;
+                hitReductions++;
+            }
+        }
+
+        hits -= hitReductions;
+
+        System.Array.Sort(colliders, colliderSorter);
+
+        float thereshold = -0.5f; // Hur bra behöver ett gömställe vara?
 
         for (int i = 0; i < hits; i++)
+        //for (int i = hits - 1; i >= 0; i--)
         {
-            if (NavMesh.SamplePosition(colliders[i].transform.position, out NavMeshHit hit, 8f, _agent.areaMask)) // Hur långt från obstacles mitt vill vi gömma oss?
+            if (NavMesh.SamplePosition(colliders[i].transform.position, out NavMeshHit hit, 1f, _agent.areaMask)) // Hur långt från obstacles mitt vill vi gömma oss?
             {
+                if (Vector3.Dot(_transform.localRotation * Vector3.forward, (hit.position - _transform.position).normalized) < 0.25f) continue;
                 if (!NavMesh.FindClosestEdge(hit.position, out hit, _agent.areaMask))
                 {
                     // Debug.Log("No edges?");
                     continue;
                 }
-                float normalSum = 0;
-                foreach (GameObject chaser in _status.GetDetections())
-                { // Summerar hur bra ett gömställe är, kanske ändra till att bara respektera en chaser.
-                    normalSum += Vector3.Dot(hit.normal, (chaser.transform.position - hit.position).normalized); 
-                }
+                // Summerar hur bra ett gömställe är, kanske ändra till att bara respektera en chaser.
                
-                if (normalSum < thereshold)
+                if (Vector3.Dot(hit.normal, (_status.GetDetections()[0].transform.position - hit.position).normalized) < thereshold)
                 {
-                    
+                    Debug.Log("Collider: " + colliders[i] + ", Normal: " + hit.normal);
+                    Debug.DrawLine(_transform.position, hit.position, Color.red, 0.1f);
                     _agent.SetDestination(hit.position);
-                     return NodeState.FAILURE;
+                    return NodeState.RUNNING;
+                }
+                else
+                {
+                    // Since the previous spot wasn't facing "away" enough from teh target, we'll try on the other side of the object
+                    if (NavMesh.SamplePosition(colliders[i].transform.position - (_transform.position - hit.position).normalized * 2, out NavMeshHit hit2, 2f, _agent.areaMask))
+                    {
+                        if (!NavMesh.FindClosestEdge(hit2.position, out hit2, _agent.areaMask))
+                        {
+                            continue;
+                        }
+
+                        if (Vector3.Dot(hit2.normal, (_transform.position - hit2.position).normalized) < thereshold)
+                        {
+                            Debug.Log("Collider: " + colliders[i] + ", Normal: " + hit2.normal);
+                            Debug.DrawLine(_transform.position, hit2.position, Color.red, 0.1f);
+                            _agent.SetDestination(hit2.position);
+                            return NodeState.RUNNING;
+                        }
+                    }
                 }
             }
         }
+        //Debug.Log("we got problems");
+        return NodeState.FAILURE;
+    }
 
-        return NodeState.RUNNING;
+    private int colliderSorter(Collider A, Collider B)
+    {
+        if (A == null && B != null) return 1;
+        else if (A != null && B == null) return -1;
+        else if (A == null && B == null) return 0;
+        else return Vector3.Distance(_transform.position, A.transform.position).CompareTo(Vector3.Distance(_transform.position, B.transform.position));
     }
 }

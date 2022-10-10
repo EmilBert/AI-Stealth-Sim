@@ -22,6 +22,11 @@ public class TaskGoToObjective : Node
 
     public override NodeState Evaluate()
     {
+        if (!_agent.isOnNavMesh)
+        {
+            NavMesh.FindClosestEdge(_playerTransform.position, out NavMeshHit hit, _agent.areaMask);
+            _agent.Warp(hit.position);
+        }
         if(_agent.destination != _objectives[_currentObjective].position)
         {
             _agent.SetDestination(_objectives[_currentObjective].position);

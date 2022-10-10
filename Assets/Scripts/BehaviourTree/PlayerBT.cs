@@ -26,7 +26,10 @@ public class PlayerBT : BTree
         {
             // Chase
             new CheckChased(detectionStatus),
-            new TaskHide(playerTransform, hideableObjects, agent, detectionStatus),
+            new Selector(new List<Node>{
+                new TaskHide(playerTransform, hideableObjects, agent, detectionStatus),
+                new Wait(1f, agent),
+            }),
         }),
         new TaskGoToObjective(objectives, agent, playerTransform),
         

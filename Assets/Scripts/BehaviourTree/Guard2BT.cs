@@ -32,7 +32,7 @@ public class Guard2BT : GuardBT
             new Sequence(new List<Node>
             {
                 // Investigate
-                new CheckSuspicious(fov, guardTransform),
+                new CheckSuspicious(fov, guardTransform, agent, obstacles),
                 new TaskInvestigate(agent, fov, obstacles),
             }),
             // Return to position
