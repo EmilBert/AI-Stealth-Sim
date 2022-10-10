@@ -22,7 +22,10 @@ public class TaskGoToObjective : Node
 
     public override NodeState Evaluate()
     {
-        Debug.Log(_objectives.Count);
+        if(_agent.destination == _objectives[_currentObjective].position)
+        {
+            _agent.SetDestination(_objectives[_currentObjective].position);
+        }
         if((_playerTransform.position - _objectives[_currentObjective].position).sqrMagnitude < 2f && _objectives.Count > 1)
         {
             Debug.Log("Objective reached");

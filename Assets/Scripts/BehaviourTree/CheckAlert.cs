@@ -20,10 +20,12 @@ public class CheckAlert : Node
 
         if( _state == GuardStates.ALERTED)
         {
+            _fov.GetCurrentTarget().gameObject.GetComponent<DetectionStatus>().SetDetected(true, _fov.gameObject);
             _nodeState = NodeState.SUCCESS;
         }
         else
         {
+            if (_fov.GetCurrentTarget() != null) _fov.GetCurrentTarget().gameObject.GetComponent<DetectionStatus>().SetDetected(false, _fov.gameObject);
             _nodeState = NodeState.FAILURE;
         }
         return _nodeState;

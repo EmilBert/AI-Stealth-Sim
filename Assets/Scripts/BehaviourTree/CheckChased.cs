@@ -7,12 +7,13 @@ using BehaviourTree;
 
 public class CheckChased : Node
 {
-    public CheckChased(){
-
+    DetectionStatus _status;
+    public CheckChased(DetectionStatus status){
+        _status = status;
     }
 
     public override NodeState Evaluate()
     {
-        return NodeState.RUNNING;
+        return _status.GetDetections().Count == 0 ? NodeState.FAILURE : NodeState.SUCCESS;
     }
 }

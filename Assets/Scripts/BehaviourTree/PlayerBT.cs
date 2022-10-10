@@ -9,9 +9,11 @@ public class PlayerBT : BTree
     // Start is called before the first frame update
     [SerializeField]
     public List<Transform>  objectives;
+    [SerializeField]
+    public LayerMask        hideableObjects;
     private Transform       playerTransform;
     private NavMeshAgent    agent;
-    public DetectionStatus detectionStatus;
+    public DetectionStatus  detectionStatus;
 
     protected override Node SetupTree()
     {
@@ -20,12 +22,12 @@ public class PlayerBT : BTree
 
         Node root = new Selector(new List<Node>
         {
-        //  new Sequence(new List<Node>
-        //  {
-        //      // Chase
-        //      new CheckChased(),
-        //      new TaskHide(),
-        //  }),
+        new Sequence(new List<Node>
+        {
+            // Chase
+            new CheckChased(detectionStatus),
+            new TaskHide(playerTransform, hideableObjects, agent, detectionStatus),
+        }),
         new TaskGoToObjective(objectives, agent, playerTransform),
         
         });
