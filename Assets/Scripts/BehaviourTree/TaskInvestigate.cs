@@ -36,8 +36,8 @@ public class TaskInvestigate : Node
         _pos = _fov.GetLastSeenPosition();
         
         _agent.SetDestination(_pos);
-        Debug.Log(_agent.destination);
-        Debug.Log(_agent.remainingDistance);
+        // Debug.Log(_agent.destination);
+        // Debug.Log(_agent.remainingDistance);
             
         if(_agent.remainingDistance <= 0.2f){
             Debug.Log("At Target");
@@ -46,7 +46,7 @@ public class TaskInvestigate : Node
             root.SetData("timer", 0f);
             return NodeState.FAILURE;
         }
-        Debug.Log("Moving towards target");
+        // Debug.Log("Moving towards target");
         return NodeState.RUNNING;
         
     }

@@ -17,12 +17,12 @@ public class TaskGoToObjective : Node
         _playerTransform = playerTransform;
 
         _currentObjective = Random.Range(0, _objectives.Count);
-            _agent.SetDestination(_objectives[_currentObjective].position);
+        _agent.SetDestination(_objectives[_currentObjective].position);
     }
 
     public override NodeState Evaluate()
     {
-        if(_agent.destination == _objectives[_currentObjective].position)
+        if(_agent.destination != _objectives[_currentObjective].position)
         {
             _agent.SetDestination(_objectives[_currentObjective].position);
         }
