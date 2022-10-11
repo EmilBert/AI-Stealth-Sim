@@ -34,6 +34,7 @@ public class TaskGoToObjective : Node
         if((_playerTransform.position - _objectives[_currentObjective].position).sqrMagnitude < 2f && _objectives.Count > 1)
         {
             Debug.Log("Objective reached");
+            _objectives[_currentObjective].gameObject.SetActive(false);
             _objectives.RemoveAt(_currentObjective);
             _currentObjective = Random.Range(0, _objectives.Count);
             _agent.SetDestination(_objectives[_currentObjective].position);
