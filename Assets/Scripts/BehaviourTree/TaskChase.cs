@@ -32,8 +32,8 @@ public class TaskChase : Node
             lookDir     = new Vector3(lookDir.x, 0, lookDir.z);
             _transform.rotation = Quaternion.LookRotation(lookDir);
 
-            Debug.Log("Chasing");
-            _agent.speed = 5f;
+           // Debug.Log("Chasing");
+            _agent.speed = 3f;
             _agent.SetDestination(_fov.GetCurrentTarget().position);
             return NodeState.SUCCESS;
         }

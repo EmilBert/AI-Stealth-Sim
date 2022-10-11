@@ -7,7 +7,6 @@ public class GuardBT : BTree
 {
     public Transform[] waypoints;
     public static float speed = 3.5f;
-    
     protected Transform guardTransform;
     protected NavMeshAgent agent;
     protected FieldOfView fov;
@@ -42,6 +41,8 @@ public class GuardBT : BTree
                     new TaskInvestigate(agent, fov, obstacles),
                 })
             }),
+            new TaskReturnToPosition(agent, waypoints[0].position, guardTransform),
+
             // Patrol
             new TaskPatrol(waypoints, guardTransform, agent, obstacles),
         });

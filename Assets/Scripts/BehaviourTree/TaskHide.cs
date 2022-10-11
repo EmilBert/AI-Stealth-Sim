@@ -27,11 +27,11 @@ public class TaskHide : Node
         root.SetData("resetTimer", true);
         Debug.Log("Gotta hide");
         for (int i = 0; i < colliders.Length; i++) colliders[i] = null;
-        int hits = Physics.OverlapSphereNonAlloc(_transform.position, 10.0f, colliders, _mask); // Hur många obstacles finns i närheten?
+        int hits = Physics.OverlapSphereNonAlloc(_transform.position, 15.0f, colliders, _mask); // Hur många obstacles finns i närheten?
         int hitReductions = 0;
 
         for (int i = 0; i < hits; i++) {
-            if (Vector3.Distance(colliders[i].transform.position, _status.GetDetections()[0].transform.position) < 4f) {
+            if (Vector3.Distance(colliders[i].transform.position, _status.GetDetections()[0].transform.position) < 2f) {
                 colliders[i] = null;
                 hitReductions++;
             }
@@ -48,7 +48,7 @@ public class TaskHide : Node
         {
             if (NavMesh.SamplePosition(colliders[i].transform.position, out NavMeshHit hit, 1f, _agent.areaMask)) // Hur långt från obstacles mitt vill vi gömma oss?
             {
-                if (Vector3.Dot(_transform.localRotation * Vector3.forward, (hit.position - _transform.position).normalized) < 0.25f) continue;
+                if (Vector3.Dot(_transform.localRotation * Vector3.forward, (hit.position - _transform.position).normalized) < -0.25f) continue;
                 if (!NavMesh.FindClosestEdge(hit.position, out hit, _agent.areaMask))
                 {
                     // Debug.Log("No edges?");
@@ -58,7 +58,7 @@ public class TaskHide : Node
                
                 if (Vector3.Dot(hit.normal, (_status.GetDetections()[0].transform.position - hit.position).normalized) < thereshold)
                 {
-                    Debug.Log("Collider: " + colliders[i] + ", Normal: " + hit.normal);
+                    //Debug.Log("Collider: " + colliders[i] + ", Normal: " + hit.normal);
                     Debug.DrawLine(_transform.position, hit.position, Color.red, 0.1f);
                     _agent.SetDestination(hit.position);
                     return NodeState.RUNNING;
@@ -75,7 +75,7 @@ public class TaskHide : Node
 
                         if (Vector3.Dot(hit2.normal, (_transform.position - hit2.position).normalized) < thereshold)
                         {
-                            Debug.Log("Collider: " + colliders[i] + ", Normal: " + hit2.normal);
+                            //Debug.Log("Collider: " + colliders[i] + ", Normal: " + hit2.normal);
                             Debug.DrawLine(_transform.position, hit2.position, Color.red, 0.1f);
                             _agent.SetDestination(hit2.position);
                             return NodeState.RUNNING;
