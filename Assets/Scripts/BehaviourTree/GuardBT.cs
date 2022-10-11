@@ -41,7 +41,7 @@ public class GuardBT : BTree
                     new TaskInvestigate(agent, fov, obstacles),
                 })
             }),
-            new TaskReturnToPosition(agent, waypoints[0].position, guardTransform),
+            new TaskReturnToPosition(agent, guardTransform, obstacles),
 
             // Patrol
             new TaskPatrol(waypoints, guardTransform, agent, obstacles),

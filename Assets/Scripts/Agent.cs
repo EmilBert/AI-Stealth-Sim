@@ -70,7 +70,7 @@ public class Agent : MonoBehaviour
                     {
                         obstacle.center = Vector3.MoveTowards(obstacle.center, new Vector3(0, 0, maxDistance / 2), moveSpeed);
                         //obstacle.center = new Vector3(0, 0, maxDistance / 2);
-                        obstacle.size = Vector3.MoveTowards(obstacle.size, new Vector3(maxDistance / 2.5f, 0.5f, maxDistance), moveSpeed);
+                        obstacle.size = Vector3.MoveTowards(obstacle.size, new Vector3(maxDistance / 2.5f, 0.5f, maxDistance * 1.2f), moveSpeed);
                         //obstacle.size = new Vector3(maxDistance / 2.5f, 0.5f, maxDistance);
                     }
                 }

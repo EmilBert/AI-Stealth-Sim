@@ -31,7 +31,7 @@ public class TaskHide : Node
         int hitReductions = 0;
 
         for (int i = 0; i < hits; i++) {
-            if (Vector3.Distance(colliders[i].transform.position, _status.GetDetections()[0].transform.position) < 2f) {
+            if (Vector3.Distance(colliders[i].transform.position, _status.GetDetections()[0].transform.position) < 3f) {
                 colliders[i] = null;
                 hitReductions++;
             }
@@ -48,7 +48,7 @@ public class TaskHide : Node
         {
             if (NavMesh.SamplePosition(colliders[i].transform.position, out NavMeshHit hit, 1f, _agent.areaMask)) // Hur långt från obstacles mitt vill vi gömma oss?
             {
-                if (Vector3.Dot(_transform.localRotation * Vector3.forward, (hit.position - _transform.position).normalized) < -0.25f) continue;
+                if (Vector3.Dot(_transform.localRotation * Vector3.forward, (hit.position - _transform.position).normalized) < 0.1f) continue;
                 if (!NavMesh.FindClosestEdge(hit.position, out hit, _agent.areaMask))
                 {
                     // Debug.Log("No edges?");
@@ -61,12 +61,12 @@ public class TaskHide : Node
                     //Debug.Log("Collider: " + colliders[i] + ", Normal: " + hit.normal);
                     Debug.DrawLine(_transform.position, hit.position, Color.red, 0.1f);
                     _agent.SetDestination(hit.position);
-                    return NodeState.RUNNING;
+                    return NodeState.SUCCESS;
                 }
                 else
                 {
                     // Since the previous spot wasn't facing "away" enough from teh target, we'll try on the other side of the object
-                    if (NavMesh.SamplePosition(colliders[i].transform.position - (_transform.position - hit.position).normalized * 2, out NavMeshHit hit2, 2f, _agent.areaMask))
+                    if (NavMesh.SamplePosition(colliders[i].transform.position - (_transform.position - hit.position).normalized * 2, out NavMeshHit hit2, 0.5f, _agent.areaMask))
                     {
                         if (!NavMesh.FindClosestEdge(hit2.position, out hit2, _agent.areaMask))
                         {
@@ -78,7 +78,7 @@ public class TaskHide : Node
                             //Debug.Log("Collider: " + colliders[i] + ", Normal: " + hit2.normal);
                             Debug.DrawLine(_transform.position, hit2.position, Color.red, 0.1f);
                             _agent.SetDestination(hit2.position);
-                            return NodeState.RUNNING;
+                            return NodeState.SUCCESS;
                         }
                     }
                 }

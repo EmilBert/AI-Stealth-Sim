@@ -6,6 +6,8 @@ using BehaviourTree;
 
 public class TaskGoToObjective : Node
 {
+    private float stuckCheckTimer = 0f;
+    private float stuckCheckInterval = 1f;
     private NavMeshAgent _agent;
     private Transform _playerTransform;
     private int _currentObjective;
@@ -31,6 +33,7 @@ public class TaskGoToObjective : Node
         {
             _agent.SetDestination(_objectives[_currentObjective].position);
         }
+        Debug.Log((_playerTransform.position - _objectives[_currentObjective].position).sqrMagnitude);
         if((_playerTransform.position - _objectives[_currentObjective].position).sqrMagnitude < 2f && _objectives.Count > 1)
         {
             Debug.Log("Objective reached");
@@ -38,6 +41,18 @@ public class TaskGoToObjective : Node
             _objectives.RemoveAt(_currentObjective);
             _currentObjective = Random.Range(0, _objectives.Count);
             _agent.SetDestination(_objectives[_currentObjective].position);
+        }
+        if(stuckCheckTimer > stuckCheckInterval)
+        {
+            if (!_agent.hasPath && _agent.pathStatus == NavMeshPathStatus.PathComplete)
+            {
+                Debug.Log("Character stuck");
+                _agent.enabled = false;
+                _agent.enabled = true;
+                Debug.Log("navmesh re enabled");
+                // navmesh agent will start moving again
+            }
+            stuckCheckTimer = 0f;
         }
         return NodeState.RUNNING;
     }

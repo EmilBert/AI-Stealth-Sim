@@ -6,8 +6,6 @@ using BehaviourTree;
 
 public class TaskPatrol : Node
 {
-    private int _currentWaypointIndex = 0;
-
     private float _waitTime = 1f; // in seconds
     private float _waitCounter = 0f;
     private bool _waiting = false;
@@ -16,9 +14,13 @@ public class TaskPatrol : Node
     private Transform[]         _waypoints;
     private NavMeshAgent        _agent;
     private NavMeshObstacle[]   _obstacles;
+    private Node root;
 
     public TaskPatrol(Transform[] waypoints, Transform transform, NavMeshAgent agent, NavMeshObstacle[] obstacles)
     {
+        root = this;
+        while (root.parent != null) root = root.parent;
+        root.SetData("currentWaypointIndex", 0);
         _waypoints = waypoints;
         _transform = transform;
         _agent = agent;
@@ -33,7 +35,7 @@ public class TaskPatrol : Node
         {
             _obstacle.enabled = true;
         }
-        Transform wp = _waypoints[_currentWaypointIndex];
+        Transform wp = _waypoints[(int)root.GetData("currentWaypointIndex")];
         wp.position = new Vector3(wp.position.x, 0.0f, wp.position.z);
         if (new Vector2(_transform.position.x - wp.position.x, _transform.position.z - wp.position.z).sqrMagnitude < 0.01f)
         {
@@ -55,13 +57,13 @@ public class TaskPatrol : Node
                 _waiting = true;
                 //_agent.speed = GuardBT.speed;
 
-                _currentWaypointIndex = (_currentWaypointIndex + 1) % _waypoints.Length;
+                root.SetData("currentWaypointIndex", ((int)root.GetData("currentWaypointIndex") + 1) % _waypoints.Length);
                 //_agent.SetDestination(_waypoints[_currentWaypointIndex].position);
                 //Debug.Log("New Destination: " + _waypoints[_currentWaypointIndex].position);
             }
         }
         else {
-            _transform.LookAt(_waypoints[_currentWaypointIndex].position);
+            _transform.LookAt(_waypoints[(int)root.GetData("currentWaypointIndex")].position);
             _transform.position = Vector3.MoveTowards(_transform.position, wp.position, 
                 Mathf.Min(GuardBT.speed * Time.deltaTime, new Vector2(_transform.position.x - wp.position.x, _transform.position.z - wp.position.z).magnitude));
         }
