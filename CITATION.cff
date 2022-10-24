@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Bertholdsson"
+  given-names: "Emil"
+  
+- family-names: "Carlsson"
+  given-names: "Viktor"
+
+- family-names: "Dahl"
+  given-names: "Hugo"
+  
+title: "AI-Stealth-Sim"
+version: 1.0.0
+
+date-released: 2022-10-24
+url: "https://github.com/EmilBert/AI-Stealth-Sim"
